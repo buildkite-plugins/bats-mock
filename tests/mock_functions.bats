@@ -1,4 +1,6 @@
 #!/usr/bin/env bats
+# shellcheck disable=SC2317
+# because we are declaring functions inside the setup function itself
 
 load '../stub'
 
