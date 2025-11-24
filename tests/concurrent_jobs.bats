@@ -6,14 +6,14 @@ generate_stubbed_test_file() {
   local num_tests="$1"
   local cmd_to_stub="$2"
   local output_file="$3"
-
-  echo "load $(cd .. && echo "$(pwd)/stub")" >"${output_file}"
+  local bats_test_placeholder="@test"
+  echo "load '$(cd "${BATS_TEST_DIRNAME}/.." && echo "$(pwd)/stub")'" >"${output_file}"
 
   local test_number
   for test_number in $(seq 1 "${num_tests}"); do
     cat >>"${output_file}" <<EOF
-bats_test_placeholder "Simple stub test with arg '${test_number}'" {
-  stub ${cmd_to_stub} "${test_number} : echo '${cmd_to_stub} called with arg ${test_number}'"
+${bats_test_placeholder} "concurrent stub '${cmd_to_stub} ${test_number}'" {
+  stub ${cmd_to_stub} "${test_number} : echo '${cmd_to_stub} called with arg ${test_number}"
 
   run ${cmd_to_stub} ${test_number}
 
@@ -22,9 +22,6 @@ bats_test_placeholder "Simple stub test with arg '${test_number}'" {
 
 EOF
   done
-
-  # Prevent bats from interpreting the placeholder during test generation
-  sed -i '' 's/bats_test_placeholder/@test/g' "${output_file}"
 }
 
 @test "stubs do not interfere with each other when using 'bats --jobs'" {
