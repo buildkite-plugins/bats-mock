@@ -21,7 +21,7 @@ _STUB_END="${PROGRAM}_STUB_END"
 _STUB_DEBUG="${PROGRAM}_STUB_DEBUG"
 
 debug() {
-  if [ -n "${!_STUB_DEBUG}" ] ; then
+  if [ -n "${!_STUB_DEBUG-}" ] ; then
     echo "bats-mock($program): $*" >&"${!_STUB_DEBUG}"
   fi
 }
@@ -117,7 +117,7 @@ done < "${!_STUB_PLAN}"
 if [ -n "${!_STUB_END}" ]; then
   debug "unstubbing"
 
-  if [ ! -f "${!_STUB_RUN}" ] && [ -n "${!_STUB_DEBUG}" ] ; then
+  if [ ! -f "${!_STUB_RUN}" ] && [ -n "${!_STUB_DEBUG-}" ] ; then
     echo "The stub for ${program} wasn't run"
     exit 1
   fi
