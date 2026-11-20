@@ -215,7 +215,7 @@ First, it is the command (or program) itself, which when the stub is created is 
 
 ### Caveat
 
-If you stub functions, make sure to unset them, or the stub script wan't be called, as the function will shadow the binstub script on the `PATH`.
+When `stub` targets an existing shell function, it temporarily removes the function so the stub can run. Functions that mask shell builtins are rejected because the builtin would otherwise take precedence over the stub. `unstub` restores the original function after checking the stub plan; call it directly in the same shell as `stub` (not through a subshell wrapper such as Bats' `run`).
 
 ## Credits
 
